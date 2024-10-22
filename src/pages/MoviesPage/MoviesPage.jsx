@@ -2,7 +2,9 @@ import { useEffect, useState, Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 import { searchMovies } from "../../api/movies.js";
 import style from "./MoviesPage.module.css";
-const HomePage = lazy(() => import("../HomePage/HomePage.jsx"));
+const MovieList = lazy(() =>
+  import("../../components/MovieList/MovieList.jsx")
+);
 
 const Movies = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +55,7 @@ const Movies = () => {
       </form>
 
       <Suspense fallback={<div>Loading...</div>}>
-        {foundMovies && <HomePage movies={foundMovies} />}
+        {foundMovies && <MovieList movies={foundMovies} />}
       </Suspense>
     </div>
   );

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { getMoviesDay } from "../../api/movies";
-import { Link, useLocation } from "react-router-dom";
 
-import style from "./HomePage.module.css";
-export default function HomePage({ movies: initialMovies }) {
-  const [movies, setMovies] = useState(initialMovies || []);
+const MovieList = lazy(() => import("../../components/MovieList/MovieList"));
+
+export default function HomePage() {
+  const [movies, setMovies] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,30 +17,14 @@ export default function HomePage({ movies: initialMovies }) {
       }
     };
 
-    if (!initialMovies) {
-      fetchData();
-    }
-  }, [initialMovies]);
+    fetchData();
+  }, []);
 
   return (
     <main>
-      {errorMessage && (
-        <p>
-          Whoops <br />
-          <span>{errorMessage}</span>
-        </p>
-      )}
-      {movies && (
-        <ul className={style.list}>
-          {movies.map((item) => (
-            <li key={item.id} className={style.item}>
-              <Link to={`/movies/${item.id}`} state={{ from: location }}>
-                {item.title || item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <h1>Trending today movies</h1>
+
+      {<MovieList movies={movies} />}
     </main>
   );
 }
